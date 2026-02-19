@@ -1,0 +1,5 @@
+requests
+aiohttp
+urllib3
+tls_client
+typing_extensions
