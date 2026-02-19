@@ -44,7 +44,7 @@ BASE_URL_RIL = "https://api.services.sheinindia.in/rilfnlwebservices/v2/rilfnl"
 
 HITS_FILE = "super_hits.txt"
 PROXY_FILE = "proxy.txt"
-PROXY_SCRAPE_KEY = "wq9onnvzkwpxgltmu371" # PUT YOUR PROXYSCRAPE API KEY HERE to auto-whitelist ID
+PROXY_SCRAPE_KEY = "" # PUT YOUR PROXYSCRAPE API KEY HERE to auto-whitelist ID
 
 # Rate Limit Settings
 REQUEST_DELAY = 0.3
@@ -207,7 +207,7 @@ class SheinEngine:
         return os.urandom(8).hex()
 
     def gen_phone_batch(self, count):
-        return [f"7{random.randint(100000000, 999999999)}" for _ in range(count)]
+        return [f"8{random.randint(100000000, 999999999)}" for _ in range(count)]
 
     def get_client_headers(self):
         """Standard matching headers from crux.py"""
