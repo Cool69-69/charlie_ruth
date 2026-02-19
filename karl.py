@@ -156,7 +156,7 @@ def normalize_indian_phone(phone):
 # ================= TELEGRAM ALERTS =================
 def send_telegram_alert(message):
     """Send alert to all admin IDs via Telegram"""
-    token = os.environ.get("TELEGRAM_BOT_TOKEN", "8293341473:AAHoOaW8GEpYS9oz9dPX1_COLIPkX2839lM")
+    token = os.environ.get("TELEGRAM_BOT_TOKEN", "8293341473:AAEyxmWi84CRBqDOcgKrTgXzOmcqqU2DM1M")
     chat_ids_str = os.environ.get("ADMIN_CHAT_IDS", "7978240971")
     
     if not token or not chat_ids_str:
